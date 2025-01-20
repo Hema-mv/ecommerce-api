@@ -22,6 +22,7 @@ async function  createProduct(req, res)
     await newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
+    console.log('error', error);
     res.status(500).json({ error: error.message });
   }
 };
