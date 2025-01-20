@@ -20,7 +20,10 @@ async function create(req, res) {
     const token=createJWT(createdUser);
     res.status(200).json(token);
     res.status(201).json(createdUser);
+    
   } catch (error) {
+    return error
+    
     res.status(400).json(error);
   }
 }

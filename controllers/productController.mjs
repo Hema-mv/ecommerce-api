@@ -5,6 +5,8 @@ import Product from '../models/product.mjs';
 async function  getAllProducts(req, res) 
  {
   try {
+    console.log('req.body:test', req.body);
+  console.log('req.body:params', req.params);
     const products = await Product.find();
     res.json(products);
   } catch (error) {
@@ -36,6 +38,7 @@ async function  getProductById(req, res)
     }
     res.json(product);
   } catch (error) {
+    console.log('error', error);
     res.status(500).json({ error: error.message });
   }
 };
