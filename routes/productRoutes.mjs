@@ -1,6 +1,6 @@
 import express from 'express';
 //import { getAllProducts, createProduct, getProductById, updateProduct, deleteProduct } from '../controllers/productController.js';
-import productController from '../../ecommerce-api/controllers/productController.mjs';
+import productController from '../controllers/productController.mjs';
 
 
 
