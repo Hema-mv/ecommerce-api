@@ -21,6 +21,7 @@ async function create(req, res) {
     res.status(200).json(token);
     res.status(201).json(createdUser);
   } catch (error) {
+    console.log('error',error)
     res.status(400).json(error);
   }
 }
