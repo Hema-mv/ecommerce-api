@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // global configuration
-const mongoURL = process.env.ATLAS_URI;
+const mongoURL = "mongodb+srv://sa:abc123.@cluster0.ykl5f.mongodb.net/"//process.env.ATLAS_URI;
 const db = mongoose.connection;
 
 // connect to mongo
