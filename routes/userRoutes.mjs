@@ -3,7 +3,7 @@
 
 import express from "express";
 const router=express.Router();
-import  userController from "../controllers/user.mjs";
+import  userController from "../controllers/userController.mjs";
 
 //this correspondes to register on the frontend
 //becuase register means add a new user

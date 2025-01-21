@@ -7,7 +7,7 @@ import cors from 'cors';
 
 import productRoutes from './routes/productRoutes.mjs';
 import authRoutes from './routes/authRoutes.mjs';
-import users from './routes/userRoutes.mjs';
+import userRoutes from './routes/userRoutes.mjs';
 
 dotenv.config();
 const PORT = process.env.PORT || 5050;
