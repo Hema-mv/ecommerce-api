@@ -5,8 +5,7 @@ import Product from '../models/product.mjs';
 async function  getAllProducts(req, res) 
  {
   try {
-    console.log('req.body:test', req.body);
-  console.log('req.body:params', req.params);
+
     const products = await Product.find();
     res.json(products);
   } catch (error) {
@@ -17,9 +16,7 @@ async function  getAllProducts(req, res)
 async function  createProduct(req, res) 
  {
   const { name, price, description, category, stock ,image } = req.body;
-  console.log('req.body:test', req.body);
-  console.log('req.body:params', req.params);
-  try {
+   try {
     const newProduct = new Product({ name, price, description, category, stock ,image});
     await newProduct.save();
     res.status(201).json(newProduct);

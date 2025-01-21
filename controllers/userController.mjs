@@ -5,17 +5,8 @@ import bcrypt from 'bcrypt'
 
 async function create(req, res) {
 
-    // res.json({
-    //     user:{0
-    //         name:req.body.name,
-    //         email:req.body.email
-    //     }
-    // })
   try {
-    //add the user to the database
-    console.log('here',req.body)
-    const createdUser = await User.create(req.body);
- 
+    const createdUser = await User.create(req.body); 
     //create a jwt token. token will be a string
     const token=createJWT(createdUser);
     res.status(200).json(token);

@@ -1,11 +1,27 @@
 import express from 'express';
-import Order from '../models/order.mjs';
-import OrderDetail from '../models/orderDetail.mjs';
+import {
+  createOrder,
+  getOrderById,
+  updateOrderById,
+  deleteOrderById,
+  getAllOrders
+} from '../controllers/orderController.mjs';
 
 const router = express.Router();
 
-router.post('/api/orders', async (req, res) => {
- 
-});
+// Route to create a new order
+router.post('/', createOrder);
+
+// Route to get all orders
+router.get('/', getAllOrders);
+
+// Route to get an order by ID
+router.get('/:id', getOrderById);
+
+// Route to update an order by ID
+router.put('/:id', updateOrderById);
+
+// Route to delete an order by ID
+router.delete('/:id', deleteOrderById);
 
 export default router;
