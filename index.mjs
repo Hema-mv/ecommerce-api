@@ -7,7 +7,7 @@ import cors from 'cors';
 
 import productRoutes from './routes/productRoutes.mjs';
 import authRoutes from './routes/authRoutes.mjs';
-import users from './routes/user.mjs';
+import users from './routes/userRoutes.mjs';
 
 dotenv.config();
 const PORT = process.env.PORT || 5050;
@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/users', users);
+app.use('/api/users', userRoutes);
 // const customLogger = (tokens, req, res) => {
 //   // Example: Only log requests with status code 4xx or 5xx
 //   const status = tokens.status(req, res);
@@ -42,9 +42,7 @@ app.get("/*", (req, res) => {
   });
   
   //Golbal errror handling
-  app.use((err, _req, res, next) => {
-    res.status(500).send("there was an issue on the server");
-  });
+ 
   
   app.get("/", (req, res) => {
     res.send(
