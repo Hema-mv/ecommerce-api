@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 const cartSchema = new mongoose.Schema({
     userId: { type: String, required: true }, // User ID for the cart
+    //totalAmount: { type: Number },
+            status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
     items: [
         {
             productId: {
@@ -11,7 +13,9 @@ const cartSchema = new mongoose.Schema({
             },
             quantity: { type: Number, required: true },
             created: { type: Date, default: Date.now },
-            updated: { type: Date, default: Date.now }
+            updated: { type: Date, default: Date.now },
+            
+            
         },
     ],
 });

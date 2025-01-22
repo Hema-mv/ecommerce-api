@@ -13,8 +13,10 @@ export const createCart = async (req, res) => {
         return res.status(400).json({ message: 'Invalid user ID' });
       }
       const objectId = new mongoose.Types.ObjectId(userId);
-      let cart = await Cart.findOne({ userId: objectId });
- 
+     // let cart = await Cart.findOne({ userId: objectId });
+      let cart = await Cart.findOne({ userId : objectId, status: { $ne: 'completed' }} ).populate(
+        "items.productId"
+      );
       if (cart) 
         {
            items.forEach(newItem => {
@@ -27,7 +29,7 @@ export const createCart = async (req, res) => {
           }
         });
         cart.totalAmount += totalAmount;
-        cart.updatedAt = Date.now();
+        cart.updated = Date.now();
       } else {
         // Create a new cart for the user
         cart = new Cart({
@@ -35,8 +37,8 @@ export const createCart = async (req, res) => {
           items,
           totalAmount,
           status: 'pending',
-          createdAt: Date.now(),
-          updatedAt: Date.now()
+          created: Date.now(),
+          updated: Date.now()
         });
       }
   
@@ -111,9 +113,10 @@ export const getAllCarts = async (req, res) => {
       }
   try {
   
-    let cart = await Cart.findOne({ userId }).populate(
+    let cart = await Cart.findOne({ userId : userId, status: { $ne: 'completed' }} ).populate(
         "items.productId"
       );
+
       if (!cart) {
         cart = new Cart({ userId, items: [] });
         await cart.save();
@@ -139,7 +142,11 @@ if (!mongoose.isValidObjectId(userId)) {
 }
  
       //const objectId =  new mongoose.Types.ObjectId(userId);
-      const cart = await Cart.findOne({ userId }).populate('items.productId');
+    //  const cart = await Cart.findOne({ userId }).populate('items.productId');
+    let cart = await Cart.findOne({ userId : userId, status: { $ne: 'completed' }} ).populate(
+        "items.productId"
+      );
+
       //const cart = await Cart.findOne(userId).populate('items.productId');
       if (!cart) {
         return res.status(404).json({ message: 'Cart not found' });
@@ -159,7 +166,7 @@ export const updateCartById = async (req, res) => {
     const { userId, items, totalAmount, status } = req.body;
     const updatedCart = await Cart.findByIdAndUpdate(
       id,
-      { userId, items, totalAmount, status, updatedAt: Date.now() },
+      { userId, items, totalAmount, status, updated: Date.now() },
       { new: true }
     );
     if (!updatedCart) {
@@ -172,7 +179,37 @@ export const updateCartById = async (req, res) => {
   }
 };
 
-
+export const updateCartStatus = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
+    try {
+      const { cartId } = req.params;
+      const { status } = req.body;
+  
+      // Validate and convert cartId to ObjectId
+      if (!mongoose.isValidObjectId(cartId)) {
+        return res.status(400).json({ message: 'Invalid cart ID' });
+      }
+  
+      const objectId = new mongoose.Types.ObjectId(cartId);
+  
+     
+    // Find the cart by cartId and update its status
+    const cart = await Cart.findByIdAndUpdate(
+        objectId,
+        { status, updatedAt: Date.now() },
+        { new: true }
+      );
+  
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+  
+      res.status(200).json(cart);
+    } catch (error) {
+      console.error('Error updating cart status:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
 export const deleteCartById = async (req, res) => {
 console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
   try {
