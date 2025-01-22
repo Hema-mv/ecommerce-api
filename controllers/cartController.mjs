@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 import Cart from '../models/cart.mjs';
 
+
 // Create a new cart
 
 export const createCart = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
     try {
       const { userId, items, totalAmount } = req.body;
   
@@ -47,6 +49,7 @@ export const createCart = async (req, res) => {
   };
 // Get all cart items by user ID and product ID
 export const getCartItemsByUserIdAndProductId = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
     try {
       const { userId, productId } = req.params;
       const cart = await Cart.findOne({
@@ -100,6 +103,7 @@ export const getCartItemsByUserIdAndProductId = async (req, res) => {
 //     }
 //   };
 export const getAllCarts = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
     const { userId } = req.params;
 
     if (!userId || userId.trim() === "") {
@@ -149,6 +153,7 @@ if (!mongoose.isValidObjectId(userId)) {
 
 // Update a cart by ID
 export const updateCartById = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
   try {
     const { id } = req.params;
     const { userId, items, totalAmount, status } = req.body;
@@ -169,6 +174,7 @@ export const updateCartById = async (req, res) => {
 
 
 export const deleteCartById = async (req, res) => {
+console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
   try {
     const { id } = req.params;
     const deletedCart = await Cart.findByIdAndDelete(id);
@@ -181,3 +187,40 @@ export const deleteCartById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+export const deleteCartItem = async (req, res) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
+    try {
+        console.log('req.params', req.params);
+      const { cartId, itemId } = req.params;
+  
+      // Validate and convert cartId and itemId to ObjectId
+      if (!mongoose.isValidObjectId(cartId) || !mongoose.isValidObjectId(itemId)) {
+        return res.status(400).json({ message: 'Invalid cart ID or item ID' });
+      }
+  
+      const cartObjectId = new mongoose.Types.ObjectId(cartId);
+      const itemObjectId = new mongoose.Types.ObjectId(itemId);
+  
+      // Find the cart by cartId
+      const cart = await Cart.findById(cartObjectId);
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+  
+      // Find the item in the cart and remove it
+      const itemIndex = cart.items.findIndex(item => item._id.equals(itemObjectId));
+      if (itemIndex === -1) {
+        return res.status(404).json({ message: 'Item not found in cart' });
+      }
+  
+      cart.items.splice(itemIndex, 1);
+      await cart.save();
+  
+      res.status(200).json({ message: 'Item removed from cart', cart });
+    } catch (error) {
+      console.error('Error deleting cart item:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  };

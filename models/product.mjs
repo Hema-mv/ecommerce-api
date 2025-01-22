@@ -9,6 +9,11 @@ const productSchema = new mongoose.Schema({
   image: { type: String, required: true }, 
 });
 
+
+productSchema.index({ name: 1 });
+
+productSchema.index({ price: 1 });
+
 const Product = mongoose.model('Product', productSchema);
 
 export default Product;

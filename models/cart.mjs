@@ -15,6 +15,10 @@ const cartSchema = new mongoose.Schema({
         },
     ],
 });
+cartSchema.index({ userId: 1 });
+
+// Create an index on the status field for faster filtering
+cartSchema.index({ status: 1 });
 cartSchema.pre('save', function(next) {
     this.updated = Date.now();
     next();

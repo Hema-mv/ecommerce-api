@@ -20,37 +20,11 @@ app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/cart', cartRoutes);
-// const customLogger = (tokens, req, res) => {
-//   // Example: Only log requests with status code 4xx or 5xx
-//   const status = tokens.status(req, res);
-//   if (status >= 400) {
-//     return [
-//       tokens.method(req, res),
-//       tokens.url(req, res),
-//       status,
-//       tokens['response-time'](req, res), 'ms',
-//       tokens.res(req, res, 'content-length'), '-',
-//       tokens['user-agent'](req, res)
-//     ].join(' ');
-//   }
-//   //return null;
-// };
 
-// // Use morgan middleware with custom logging function
-// app.use(morgan(customLogger));
 app.get("/*", (req, res) => {
     res.redirect("/");
   });
-  
-  //Golbal errror handling
  
-  
-  app.get("/", (req, res) => {
-    res.send(
-      "<h1>You are in Ecommerce-Api</li> <li> entries - /api/calendar</li> <li> todos - /api/todos</li> <ol>"
-    );
-  });
-
   mongoose.connect(process.env.ATLAS_URI)
    .then(() => console.log('MongoDB connected')) 
    .catch(err => console.log(err));
@@ -59,3 +33,9 @@ app.get("/*", (req, res) => {
    app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`);
   });
+
+  const logRequestMethod = (req, res, next) => {
+    console.log(`HTTP Method: ${req.method}, URL: ${req.url}`);
+    next();
+  };
+  app.use(logRequestMethod);

@@ -20,7 +20,7 @@ async function create(req, res) {
 }
 async function login(req, res) {
   try {
-    console.log('login',req.body)
+   
     // Query the database to find a user with the email provided
     const user = await User.findOne({ email: req.body.email });
     // If the email does not exist, throw an error
